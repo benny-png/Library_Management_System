@@ -1,0 +1,7 @@
+#Sample requirements.txt file
+fastapi
+sqlmodel
+python-dotenv
+uvicorn
+pydantic
+python-dotenv
