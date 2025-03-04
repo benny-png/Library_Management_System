@@ -31,14 +31,20 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
-# Copy the source code into the container.
-COPY . .
+# Create database directory with proper permissions
+RUN mkdir -p /app/data && \
+    chown -R appuser:appuser /app && \
+    chmod 755 /app/data
 
-# Create database directory and ensure it's writable
-RUN mkdir -p /app/data && chown -R appuser:appuser /app/data
+# Copy the source code into the container and set permissions
+COPY . .
+RUN chown -R appuser:appuser /app
 
 # Switch to the non-privileged user to run the application.
 USER appuser
+
+# Ensure working directory is accessible
+WORKDIR /app
 
 # Expose the port that the application listens on.
 EXPOSE 8000

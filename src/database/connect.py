@@ -32,14 +32,15 @@ class Connect:
             if url := os.getenv("DEV_DATABASE_URL"):
                 database_url = url
             else:
-                sqlite_file_name = "database.db"
+                # Use the /app/data directory for SQLite database
+                sqlite_file_name = "/app/data/database.db"
                 database_url = f"sqlite:///{sqlite_file_name}"
         else:
             database_url = os.getenv("PROD_DATABASE_URL", "")
             if not database_url:
-                raise Exception(
-                    "DATABASE_URL not set in environment variables. You're using production mode without a database URL"
-                )
+                # Use the /app/data directory for SQLite database in production
+                sqlite_file_name = "/app/data/database.db"
+                database_url = f"sqlite:///{sqlite_file_name}"
 
         return database_url
 
